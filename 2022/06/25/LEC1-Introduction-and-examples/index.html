@@ -1,0 +1,670 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>LEC1 Introduction and examples | Cecily</title><meta name="keywords" content="MIT 6.S081"><meta name="author" content="Cecily"><meta name="copyright" content="Cecily"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="6.S081 2020 Lecture 1: Introduction and examplesOverview* 6.S081 goals Understand operating system (O&#x2F;S) design and implementation Hands-on experience extending a small O&#x2F;S Hands-on experien">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LEC1 Introduction and examples">
+<meta property="og:url" content="https://heliannl.github.io/2022/06/25/LEC1-Introduction-and-examples/index.html">
+<meta property="og:site_name" content="Cecily">
+<meta property="og:description" content="6.S081 2020 Lecture 1: Introduction and examplesOverview* 6.S081 goals Understand operating system (O&#x2F;S) design and implementation Hands-on experience extending a small O&#x2F;S Hands-on experien">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg">
+<meta property="article:published_time" content="2022-06-25T12:31:39.000Z">
+<meta property="article:modified_time" content="2022-06-25T12:37:01.258Z">
+<meta property="article:author" content="Cecily">
+<meta property="article:tag" content="MIT 6.S081">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://heliannl.github.io/2022/06/25/LEC1-Introduction-and-examples/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: 'days',
+  date_suffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'LEC1 Introduction and examples',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-06-25 20:37:01'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.2.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">5</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">0</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Cecily</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">LEC1 Introduction and examples</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2022-06-25T12:31:39.000Z" title="Created 2022-06-25 20:31:39">2022-06-25</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2022-06-25T12:37:01.258Z" title="Updated 2022-06-25 20:37:01">2022-06-25</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">Word count:</span><span class="word-count">5.2k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">Reading time:</span><span>29min</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="LEC1 Introduction and examples"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="6-S081-2020-Lecture-1-Introduction-and-examples"><a href="#6-S081-2020-Lecture-1-Introduction-and-examples" class="headerlink" title="6.S081 2020 Lecture 1: Introduction and examples"></a>6.S081 2020 Lecture 1: Introduction and examples</h1><h2 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h2><h3 id="6-S081-goals"><a href="#6-S081-goals" class="headerlink" title="* 6.S081 goals"></a>* 6.S081 goals</h3><ul>
+<li>Understand operating system (O&#x2F;S) design and implementation</li>
+<li>Hands-on experience extending a small O&#x2F;S</li>
+<li>Hands-on experience writing systems software</li>
+</ul>
+<h3 id="What-is-the-purpose-of-an-O-x2F-S"><a href="#What-is-the-purpose-of-an-O-x2F-S" class="headerlink" title="* What is the purpose of an O&#x2F;S?"></a>* What is the purpose of an O&#x2F;S?</h3><ul>
+<li>Abstract the hardware for convenience and portability (可移植性)：操作系统管理和抽象底层硬件（通过借口向用户程序提供服务），比如为了方便和可移植性产生的进程或文件系统</li>
+<li>Multiplex (多路复用) the hardware among many applications</li>
+<li>Isolate applications in order to contain bugs：不同的活动不应该相互干涉</li>
+<li>Allow sharing among cooperating applications</li>
+<li>Control sharing for security：想分享的时候分享，不想分享的时候不分享，称为安全系统或权限系统，即一个访问控制系统</li>
+<li>Don’t get in the way of high performance：不阻碍甚至帮助应用程序获得良好的性能</li>
+<li>Support a wide range of applications</li>
+</ul>
+<h3 id="Organization-layered-picture"><a href="#Organization-layered-picture" class="headerlink" title="* Organization: layered picture"></a>* Organization: layered picture</h3><p>  [user (计算机程序运行的地方) &#x2F;kernel (计算机资源的守卫者，启动时运行的第一个程序) diagram]</p>
+<ul>
+<li>user applications: vi, gcc, DB, &amp;c</li>
+<li>kernel services</li>
+<li>h&#x2F;w: CPU, RAM, disk, net, &amp;c</li>
+</ul>
+<ul>
+<li>we care a lot about the interfaces and internal kernel structure</li>
+</ul>
+<h3 id="What-services-does-an-O-x2F-S-kernel-typically-provide"><a href="#What-services-does-an-O-x2F-S-kernel-typically-provide" class="headerlink" title="* What services does an O&#x2F;S kernel typically provide?"></a>* What services does an O&#x2F;S kernel typically provide?</h3><ul>
+<li>process (a running program)</li>
+<li>memory allocation</li>
+<li>file contents</li>
+<li>file names, directories</li>
+<li>access control (security)</li>
+<li>many others: users, IPC, network, time, terminals</li>
+</ul>
+<h3 id="What’s-the-application-x2F-kernel-interface"><a href="#What’s-the-application-x2F-kernel-interface" class="headerlink" title="* What’s the application &#x2F; kernel interface?"></a>* What’s the application &#x2F; kernel interface?</h3><ul>
+<li><p>“System calls”</p>
+</li>
+<li><p>Examples, in C, from UNIX (e.g. Linux, macOS, FreeBSD):</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">fd = open(<span class="string">&quot;out&quot;</span>, <span class="number">1</span>);</span><br><span class="line">write(fd, <span class="string">&quot;hello\n&quot;</span>, <span class="number">6</span>);</span><br><span class="line">pid = fork();</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>These look like function calls but they aren’t</p>
+</li>
+</ul>
+<h3 id="Why-is-O-x2F-S-design-implementation-hard-and-interesting"><a href="#Why-is-O-x2F-S-design-implementation-hard-and-interesting" class="headerlink" title="* Why is O&#x2F;S design+implementation hard and interesting?"></a>* Why is O&#x2F;S design+implementation hard and interesting?</h3><ul>
+<li>操作系统通过接口向用户程序提供服务。设计良好的接口是很困难的。一方面，我们希望接口简单明了，因为这样更利于正确使用。另一方面，我们可能倾向于为应用程序提供许多复杂的特性。解决这个问题的诀窍在于设计接口时，依赖一些可结合的机制，以此来提供更好的通用性</li>
+<li>unforgiving environment: quirky h&#x2F;w, hard to debug</li>
+<li>many design tensions (矛盾):<ul>
+<li>efficient (在接近硬件的底层上运行) vs abstract&#x2F;portable&#x2F;general-purpose (便于应用)</li>
+<li>powerful vs simple interfaces</li>
+<li>flexible vs secure</li>
+</ul>
+</li>
+<li>features interact: <code>fd = open(); pid = fork();</code></li>
+<li>uses are varied: laptops, smart-phones, cloud, virtual machines, embedded</li>
+<li>evolving hardware: NVRAM, multi-core, fast networks</li>
+</ul>
+<h3 id="You’ll-be-glad-you-took-this-course-if-you…"><a href="#You’ll-be-glad-you-took-this-course-if-you…" class="headerlink" title="* You’ll be glad you took this course if you…"></a>* You’ll be glad you took this course if you…</h3><ul>
+<li>care about what goes on under the hood</li>
+<li>like infrastructure</li>
+<li>need to track down bugs or security problems</li>
+<li>care about high performance</li>
+</ul>
+<h2 id="Class-structure"><a href="#Class-structure" class="headerlink" title="Class structure"></a>Class structure</h2><h3 id="Online-course-information"><a href="#Online-course-information" class="headerlink" title="* Online course information:"></a>* Online course information:</h3><p>  <a target="_blank" rel="noopener" href="https://pdos.csail.mit.edu/6.S081/">https://pdos.csail.mit.edu/6.S081/</a> – schedule, assignments, labs<br>  Piazza – announcements, discussion, lab help</p>
+<h3 id="Lectures"><a href="#Lectures" class="headerlink" title="* Lectures"></a>* Lectures</h3><ul>
+<li>O&#x2F;S ideas</li>
+<li>case study of xv6, a small O&#x2F;S, via code and xv6 book</li>
+<li>lab background</li>
+<li>O&#x2F;S papers</li>
+<li>submit a question about each reading, before lecture.</li>
+</ul>
+<h3 id="Labs"><a href="#Labs" class="headerlink" title="* Labs:"></a>* Labs:</h3><ul>
+<li>The point: hands-on experience</li>
+<li>Mostly one week each.</li>
+<li>Three kinds:<ul>
+<li>Systems programming (due next week…)</li>
+<li>O&#x2F;S primitives, e.g. thread switching.</li>
+<li>O&#x2F;S kernel extensions to xv6, e.g. network.</li>
+</ul>
+</li>
+<li>Use piazza to ask&#x2F;answer lab questions.</li>
+<li>Discussion is great, but please do not look at others’ solutions!</li>
+</ul>
+<h3 id="Grading"><a href="#Grading" class="headerlink" title="* Grading:"></a>* Grading:</h3><ul>
+<li>70% labs, based on tests (the same tests you run).</li>
+<li>20% lab check-off meetings: we’ll ask you about randomly-selected labs.</li>
+<li>10% home-work and class&#x2F;piazza discussion.</li>
+<li>No exams, no quizzes.</li>
+<li>Note that most of the grade is from labs. Start them early!</li>
+</ul>
+<h2 id="Introduction-to-UNIX-system-calls"><a href="#Introduction-to-UNIX-system-calls" class="headerlink" title="Introduction to UNIX system calls"></a>Introduction to UNIX system calls</h2><h3 id="Applications-see-the-O-x2F-S-via-system-calls-that-interface-will-be-a-big-focus"><a href="#Applications-see-the-O-x2F-S-via-system-calls-that-interface-will-be-a-big-focus" class="headerlink" title="* Applications see the O&#x2F;S via system calls; that interface will be a big focus."></a>* Applications see the O&#x2F;S via system calls; that interface will be a big focus.</h3><ul>
+<li>let’s start by looking at how programs use system calls.</li>
+<li>you’ll use these system calls in the first lab.</li>
+<li>and extend and improve them in subsequent labs.</li>
+</ul>
+<h3 id="I’ll-show-some-examples-and-run-them-on-xv6"><a href="#I’ll-show-some-examples-and-run-them-on-xv6" class="headerlink" title="* I’ll show some examples, and run them on xv6."></a>* I’ll show some examples, and run them on xv6.</h3><ul>
+<li>xv6 has similar structure to UNIX systems such as Linux.</li>
+<li>but much simpler <ul>
+<li>you’ll be able to digest all of xv6 accompanying book explains how xv6 works, and why</li>
+</ul>
+</li>
+<li>why UNIX?<ul>
+<li>open source, well documented, clean design, widely used</li>
+<li>studying xv6 will help if you ever need to look inside Linux</li>
+</ul>
+</li>
+<li>xv6 has two roles in 6.S081:<ul>
+<li>example of core functions: virtual memory, multi-core, interrupts, &amp;c</li>
+<li>starting point for most of the labs</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>xv6 runs on RISC-V, as in current 6.004</li>
+<li>you’ll run xv6 under the qemu machine emulator</li>
+</ul>
+<h3 id="example-copy-c-copy-input-to-output"><a href="#example-copy-c-copy-input-to-output" class="headerlink" title="* example: copy.c, copy input to output"></a>* example: copy.c, copy input to output</h3><ul>
+<li><p>read bytes from input, write them to the output</p>
+<ul>
+<li><p>$ copy</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// copy.c: copy input to output.</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;kernel/types.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;user/user.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span></span><br><span class="line"><span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="type">char</span> buf[<span class="number">64</span>];</span><br><span class="line"></span><br><span class="line">  <span class="keyword">while</span>(<span class="number">1</span>)&#123;</span><br><span class="line">    <span class="type">int</span> n = read(<span class="number">0</span>, buf, <span class="keyword">sizeof</span>(buf));</span><br><span class="line">    <span class="keyword">if</span>(n &lt;= <span class="number">0</span>)</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    write(<span class="number">1</span>, buf, n);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>copy.c is written in C</p>
+</li>
+<li><p>Kernighan and Ritchie (K&amp;R) book is good for learning C</p>
+</li>
+<li><p>you can find these example programs via the schedule on the web site</p>
+</li>
+</ul>
+</li>
+<li><p>read() and write() are system calls</p>
+<ul>
+<li>first read()&#x2F;write() argument is a “file descriptor” (fd)<ul>
+<li>passed to kernel to tell it which “open file” to read&#x2F;write</li>
+<li>must previously have been opened</li>
+<li>an FD connects to a file&#x2F;device&#x2F;socket&#x2F;&amp;c</li>
+<li>a process can open many files, have many FDs</li>
+<li>UNIX convention: fd 0 is “standard input”, 1 is “standard output”</li>
+</ul>
+</li>
+<li>second read() argument is a pointer to some memory into which to read</li>
+<li>third argument is the maximum number of bytes to read<ul>
+<li>read() may read less, but not more</li>
+<li>return value: number of bytes actually read, or -1 for error, or 0 for read until the end of the file when reading from file</li>
+</ul>
+</li>
+<li>write(int fd, void * buf, size_t count);<ul>
+<li>write()会把参数buf所指的内存写入count个字节到参数fd所指的文件内</li>
+</ul>
+</li>
+<li>read(int fd, void * buf, size_t count);<ul>
+<li>read()会把参数fd所指的文件传送count个字节到buf所指的内存中</li>
+</ul>
+</li>
+<li>note: copy.c does not care about the format of the data</li>
+<li>UNIX I&#x2F;O is 8-bit bytes</li>
+<li>interpretation is application-specific, e.g. database records, C source, &amp;c</li>
+<li>where do file descriptors come from?</li>
+</ul>
+</li>
+</ul>
+<h3 id="example-open-c-create-a-file"><a href="#example-open-c-create-a-file" class="headerlink" title="* example: open.c, create a file"></a>* example: open.c, create a file</h3><ul>
+<li><p>$ open</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// open.c: create a file, write to it.</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;kernel/types.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;user/user.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;kernel/fcntl.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span></span><br><span class="line"><span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="type">int</span> fd = open(<span class="string">&quot;output.txt&quot;</span>, O_WRONLY | O_CREATE);</span><br><span class="line">  write(fd, <span class="string">&quot;ooo\n&quot;</span>, <span class="number">4</span>);</span><br><span class="line"></span><br><span class="line">  <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>$ cat output.txt</p>
+</li>
+<li><p>open() creates a file, returns a file descriptor (or -1 for error)</p>
+<ul>
+<li>FD is a small integer</li>
+<li>FD indexes into a per-process table maintained by kernel (索引到内核中一个维护进程状态的表中，内核为每个进程记住一张表，（表中）通过文件描述符进行索引，这张表告诉内核每个文件描述符引用的是什么，每个进程都有自己的文件描述符空间 — 内核为每个进程维护单独的文件描述符，相同的文件描述符数字在不同的进程中可能引用不同的文件)</li>
+</ul>
+</li>
+<li><p>[user&#x2F;kernel diagram]</p>
+<ul>
+<li>different processes have different FD name-spaces<br>i.e. FD 1 often means different things to different processes</li>
+<li>these examples ignore errors – don’t be this sloppy!</li>
+<li>Figure 1.2 in the xv6 book lists system call arguments&#x2F;return<br>or look at UNIX man pages, e.g. “man 2 open”</li>
+</ul>
+</li>
+</ul>
+<h3 id="what-happens-when-a-program-calls-a-system-call-like-open"><a href="#what-happens-when-a-program-calls-a-system-call-like-open" class="headerlink" title="* what happens when a program calls a system call like open()?"></a>* what happens when a program calls a system call like open()?</h3><ul>
+<li>looks like a function call, but it’s actually a special instruction</li>
+<li>hardware saves some user registers</li>
+<li>hardware increases privilege level</li>
+<li>hardware jumps to a known “entry point” in the kernel</li>
+<li>now running C code in the kernel</li>
+<li>kernel calls system call implementation<ul>
+<li>open() looks up name in file system</li>
+<li>it might wait for the disk</li>
+<li>it updates kernel data structures (cache, FD table)</li>
+</ul>
+</li>
+<li>restore user registers</li>
+<li>reduce privilege level</li>
+<li>jump back to calling point in the program, which resumes</li>
+<li>we’ll see more detail later in the course</li>
+</ul>
+<h3 id="I’ve-been-typing-to-UNIX’s-command-line-interface-the-shell"><a href="#I’ve-been-typing-to-UNIX’s-command-line-interface-the-shell" class="headerlink" title="* I’ve been typing to UNIX’s command-line interface, the shell."></a>* I’ve been typing to UNIX’s command-line interface, the shell.</h3><ul>
+<li>the shell prints the “$” prompts.</li>
+<li>the shell lets you run UNIX command-line utilities</li>
+<li>useful for system management, messing with files, development, scripting<ul>
+<li>$ ls</li>
+<li>$ ls &gt; out</li>
+<li>$ grep x &lt; out</li>
+</ul>
+</li>
+<li>UNIX supports other styles of interaction too<ul>
+<li>window systems, GUIs, servers, routers, &amp;c.</li>
+</ul>
+</li>
+<li>but time-sharing via the shell was the original focus of UNIX.</li>
+<li>we can exercise many system calls via the shell.</li>
+</ul>
+<h3 id="example-fork-c-create-a-new-process"><a href="#example-fork-c-create-a-new-process" class="headerlink" title="* example: fork.c, create a new process"></a>* example: fork.c, create a new process</h3><ul>
+<li><p>the shell creates a new process for each command you type, e.g. for</p>
+<ul>
+<li>$ echo hello</li>
+</ul>
+</li>
+<li><p>the fork() system call creates a new process</p>
+<ul>
+<li><p>$ fork</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// fork.c: create a new process</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;kernel/types.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;user/user.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span></span><br><span class="line"><span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="type">int</span> pid;</span><br><span class="line"></span><br><span class="line">  pid = fork();</span><br><span class="line"></span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;fork() returned %d\n&quot;</span>, pid);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span>(pid == <span class="number">0</span>)&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;child\n&quot;</span>);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;parent\n&quot;</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>the kernel makes a copy of the calling process (创建一个调用进程的指令和数据的内存的复制，现在我们有两个使用相同内存的进程 (fork为子进程复制了父进程的虚拟内存和物理内存，不同的内存空间)，fork系统调用在两个进程中都会返回进程id)</p>
+<ul>
+<li>instructions, data, registers, file descriptors, current directory<br>“parent” and “child” processes</li>
+</ul>
+</li>
+<li><p>only difference: fork() returns a pid in parent, 0 in child</p>
+</li>
+<li><p>a pid (process ID) is an integer, kernel gives each process a different pid</p>
+</li>
+<li><p>thus:</p>
+<ul>
+<li>fork.c’s “fork() returned” executes in <em>both</em> processes</li>
+<li>the “if(pid &#x3D;&#x3D; 0)” allows code to distinguish</li>
+</ul>
+</li>
+<li><p>ok, fork lets us create a new process</p>
+</li>
+<li><p>how can we run a program in that process?</p>
+</li>
+</ul>
+<h3 id="example-exec-c-replace-calling-process-with-an-executable-file"><a href="#example-exec-c-replace-calling-process-with-an-executable-file" class="headerlink" title="* example: exec.c, replace calling process with an executable file"></a>* example: exec.c, replace calling process with an executable file</h3><ul>
+<li><p>how does the shell run a program, e.g.</p>
+<ul>
+<li><p>$ echo a b c</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;kernel/types.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;user/user.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span></span><br><span class="line"><span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> *argv[])</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="type">int</span> i;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span>(i = <span class="number">1</span>; i &lt; argc; i++)&#123;</span><br><span class="line">    write(<span class="number">1</span>, argv[i], <span class="built_in">strlen</span>(argv[i]));</span><br><span class="line">    <span class="keyword">if</span>(i + <span class="number">1</span> &lt; argc)&#123;</span><br><span class="line">      write(<span class="number">1</span>, <span class="string">&quot; &quot;</span>, <span class="number">1</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      write(<span class="number">1</span>, <span class="string">&quot;\n&quot;</span>, <span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>a program is stored in a file: instructions and initial memory created by the compiler and linker, so there’s a file called echo, containing instructions</p>
+</li>
+<li><p>echo只是获取你传递的参数，然后把它们写到它的输出中</p>
+</li>
+</ul>
+</li>
+<li><p>$ exec</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// exec.c: replace a process with an executable file</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;kernel/types.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;user/user.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span></span><br><span class="line"><span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="type">char</span> *argv[] = &#123; <span class="string">&quot;echo&quot;</span>, <span class="string">&quot;this&quot;</span>, <span class="string">&quot;is&quot;</span>, <span class="string">&quot;echo&quot;</span>, <span class="number">0</span> &#125;;</span><br><span class="line"></span><br><span class="line">  exec(<span class="string">&quot;echo&quot;</span>, argv);</span><br><span class="line"></span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;exec failed!\n&quot;</span>);</span><br><span class="line"></span><br><span class="line">  <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>exec() replaces current process with an executable file</li>
+<li>discards instruction and data memory</li>
+<li>loads instructions and memory from the file</li>
+<li>preserves file descriptors</li>
+<li>使用你指定的文件中读取的指令替换调用的进程，从文件中加载指令，覆盖当前进程，丢弃当前内存，然后执行这些指令</li>
+<li>exec系统调用在第12行，操作系统从echo文件中加载指令，在当前进程中，替换当前进程的内存，然后执行指令</li>
+<li>exec保留了当前文件描述符表，所以exec之前引用的文件描述符0 1 2等，它们在新程序中也引用相同的东西，原始的exec不会return</li>
+</ul>
+</li>
+<li><p>exec(filename, argument-array)</p>
+<ul>
+<li>argument-array holds command-line arguments; exec passes to main()</li>
+<li>cat user&#x2F;echo.c</li>
+<li>echo.c shows how a program looks at its command-line arguments</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="example-forkexec-c-fork-a-new-process-exec-a-program"><a href="#example-forkexec-c-fork-a-new-process-exec-a-program" class="headerlink" title="* example: forkexec.c, fork() a new process, exec() a program"></a>* example: forkexec.c, fork() a new process, exec() a program</h3><ul>
+<li><p>$ forkexec</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;kernel/types.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;user/user.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// forkexec.c: fork then exec</span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span></span><br><span class="line"><span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="type">int</span> pid, status;</span><br><span class="line"></span><br><span class="line">  pid = fork();</span><br><span class="line">  <span class="keyword">if</span>(pid == <span class="number">0</span>)&#123;</span><br><span class="line">    <span class="type">char</span> *argv[] = &#123; <span class="string">&quot;echo&quot;</span>, <span class="string">&quot;THIS&quot;</span>, <span class="string">&quot;IS&quot;</span>, <span class="string">&quot;ECHO&quot;</span>, <span class="number">0</span> &#125;;</span><br><span class="line">    exec(<span class="string">&quot;echo&quot;</span>, argv);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;exec failed!\n&quot;</span>);</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;parent waiting\n&quot;</span>);</span><br><span class="line">    wait(&amp;status);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;the child exited with status %d\n&quot;</span>, status);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>forkexec.c contains a common UNIX idiom:</p>
+<ul>
+<li>fork() a child process</li>
+<li>exec() a command in the child (子进程使用echo替换它自己)</li>
+<li>parent wait()s for child to finish (parent重新获得control)</li>
+</ul>
+</li>
+<li><p>the shell does fork&#x2F;exec&#x2F;wait for every command you type</p>
+<ul>
+<li>after wait(), the shell prints the next prompt</li>
+<li>to run in the background – &amp; – the shell skips the wait()</li>
+<li>exit(status) -&gt; wait(&amp;status)</li>
+<li>status convention: 0 &#x3D; success, 1 &#x3D; command encountered an error</li>
+<li>note: the fork() copies, but exec() discards the copied memory</li>
+<li>this may seem wasteful</li>
+<li>you’ll transparently eliminate the copy in the “copy-on-write” lab</li>
+<li>fork后跟着子进程里的exec，fork复制整个父进程可能有点浪费，因为exec会丢弃所有复制的内存，并将其替换为你运行的文件的内容</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>xv6的shell使用上述调用为用户运行程序<ul>
+<li>shell的主要结构很简单，请参见main(user&#x2F;sh.c:145)</li>
+<li>主循环使用getcmd函数从用户的输入中读取一行，然后调用fork创建一个shell进程的副本</li>
+<li>父进程调用wait，子进程执行命令</li>
+<li>例如：当用户向shell输入echo hello时，runcmd(user&#x2F;sh.c:58) 将以echo hello为参数被调用来执行实际命令。对于“echo hello”，它将调用exec(user&#x2F;sh.c:78)。如果exec成功，那么子进程将从echo而不是runcmd执行命令，在某刻echo会调用exit，这将导致父进程从main(user&#x2F;sh.c:78)中的wait返回</li>
+</ul>
+</li>
+</ul>
+<h3 id="example-redirect-c-redirect-the-output-of-a-command"><a href="#example-redirect-c-redirect-the-output-of-a-command" class="headerlink" title="* example: redirect.c, redirect the output of a command"></a>* example: redirect.c, redirect the output of a command</h3><ul>
+<li>what does the shell do for this?</li>
+</ul>
+<ul>
+<li>$ echo hello &gt; out</li>
+<li>$ cat &lt; out</li>
+</ul>
+<ul>
+<li>answer: fork, change FD 1 in child, exec echo</li>
+</ul>
+<ul>
+<li><p>$ redirect</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;kernel/types.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;user/user.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;kernel/fcntl.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// redirect.c: run a command with output redirected</span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span></span><br><span class="line"><span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="type">int</span> pid;</span><br><span class="line"></span><br><span class="line">  pid = fork();</span><br><span class="line">  <span class="keyword">if</span>(pid == <span class="number">0</span>)&#123;</span><br><span class="line">    close(<span class="number">1</span>);</span><br><span class="line">    open(<span class="string">&quot;output.txt&quot;</span>, O_WRONLY|O_CREATE);</span><br><span class="line"></span><br><span class="line">    <span class="type">char</span> *argv[] = &#123; <span class="string">&quot;echo&quot;</span>, <span class="string">&quot;this&quot;</span>, <span class="string">&quot;is&quot;</span>, <span class="string">&quot;redirected&quot;</span>, <span class="string">&quot;echo&quot;</span>, <span class="number">0</span> &#125;;</span><br><span class="line">    exec(<span class="string">&quot;echo&quot;</span>, argv);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;exec failed!\n&quot;</span>);</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    wait((<span class="type">int</span> *) <span class="number">0</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>$ cat output.txt</p>
+</li>
+<li><p>note: open() always chooses lowest unused FD; 1 due to close(1).</p>
+</li>
+<li><p>fork, FDs, and exec interact nicely to implement I&#x2F;O redirection</p>
+</li>
+<li><p>separate fork-then-exec give child a chance to change FDs before exec</p>
+</li>
+<li><p>FDs provide indirection commands just use FDs 0 and 1, don’t have to know where they go</p>
+</li>
+<li><p>exec preserves the FDs that sh set up</p>
+</li>
+<li><p>thus: only sh has to know about I&#x2F;O redirection, not each program</p>
+</li>
+<li><p>在子进程中，shell修改了文件描述符的设置，让子进程的文件描述符1（按照惯例，大多数程序使用1作为输出）修改为指向输出文件，然后执行需要的命令，同时保留父进程shell的文件描述符1不变</p>
+</li>
+</ul>
+<h3 id="It’s-worth-asking-“why”-about-design-decisions"><a href="#It’s-worth-asking-“why”-about-design-decisions" class="headerlink" title="* It’s worth asking “why” about design decisions:"></a>* It’s worth asking “why” about design decisions:</h3><ul>
+<li>Why these I&#x2F;O and process abstractions? Why not something else?</li>
+<li>Why provide a file system? Why not let programs use the disk their own way?</li>
+<li>Why FDs? Why not pass a filename to write()?</li>
+<li>Why are files streams of bytes, not disk blocks or formatted records?</li>
+<li>Why not combine fork() and exec()?</li>
+<li>The UNIX design works well, but we will see other designs!</li>
+</ul>
+<h3 id="example-pipe1-c-communicate-through-a-pipe"><a href="#example-pipe1-c-communicate-through-a-pipe" class="headerlink" title="* example: pipe1.c, communicate through a pipe"></a>* example: pipe1.c, communicate through a pipe</h3><ul>
+<li><p>how does the shell implement</p>
+<ul>
+<li>$ ls | grep x</li>
+</ul>
+</li>
+<li><p>$ pipe1</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// pipe1.c: communication over a pipe</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;kernel/types.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;user/user.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span></span><br><span class="line"><span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="type">int</span> fds[<span class="number">2</span>];</span><br><span class="line">  <span class="type">char</span> buf[<span class="number">100</span>];</span><br><span class="line">  <span class="type">int</span> n;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// create a pipe, with two FDs in fds[0], fds[1].</span></span><br><span class="line">  pipe(fds);</span><br><span class="line">  </span><br><span class="line">  write(fds[<span class="number">1</span>], <span class="string">&quot;this is pipe1\n&quot;</span>, <span class="number">14</span>);</span><br><span class="line">  n = read(fds[<span class="number">0</span>], buf, <span class="keyword">sizeof</span>(buf));</span><br><span class="line"></span><br><span class="line">  write(<span class="number">1</span>, buf, n);</span><br><span class="line"></span><br><span class="line">  <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>an FD can refer to a “pipe”, as well as a file</p>
+</li>
+<li><p>the pipe() system call creates two FDs</p>
+<ul>
+<li>read from the first FD</li>
+<li>write to the second FD</li>
+</ul>
+</li>
+<li><p>the kernel maintains a buffer for each pipe</p>
+<ul>
+<li>[u&#x2F;k diagram]</li>
+<li>write() appends to the buffer</li>
+<li>read() waits until there is data</li>
+</ul>
+</li>
+</ul>
+<h3 id="example-pipe2-c-communicate-between-processes"><a href="#example-pipe2-c-communicate-between-processes" class="headerlink" title="* example: pipe2.c, communicate between processes"></a>* example: pipe2.c, communicate between processes</h3><ul>
+<li><p>pipes combine well with fork() to implement ls | grep x</p>
+<ul>
+<li>shell creates a pipe,</li>
+<li>then forks (twice),</li>
+<li>then connects ls’s FD 1 to pipe’s write FD,</li>
+<li>and grep’s FD 0 to the pipe</li>
+<li>[diagram]</li>
+</ul>
+</li>
+<li><p>$ pipe2 – a simplified version </p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;kernel/types.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;user/user.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// pipe2.c: communication between two processes</span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span></span><br><span class="line"><span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="type">int</span> n, pid;</span><br><span class="line">  <span class="type">int</span> fds[<span class="number">2</span>];</span><br><span class="line">  <span class="type">char</span> buf[<span class="number">100</span>];</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// create a pipe, with two FDs in fds[0], fds[1].</span></span><br><span class="line">  pipe(fds);</span><br><span class="line"></span><br><span class="line">  pid = fork();</span><br><span class="line">  <span class="keyword">if</span> (pid == <span class="number">0</span>) &#123;</span><br><span class="line">    write(fds[<span class="number">1</span>], <span class="string">&quot;this is pipe2\n&quot;</span>, <span class="number">14</span>);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    n = read(fds[<span class="number">0</span>], buf, <span class="keyword">sizeof</span>(buf));</span><br><span class="line">    write(<span class="number">1</span>, buf, n);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>pipes are a separate abstraction, but combine well w&#x2F; fork()</p>
+</li>
+</ul>
+<h3 id="example-list-c-list-files-in-a-directory"><a href="#example-list-c-list-files-in-a-directory" class="headerlink" title="* example: list.c, list files in a directory"></a>* example: list.c, list files in a directory</h3><ul>
+<li><p>how does ls get a list of the files in a directory?</p>
+</li>
+<li><p>you can open a directory and read it -&gt; file names</p>
+</li>
+<li><p>“.” is a pseudo-name for a process’s current directory</p>
+</li>
+<li><p>see ls.c for more details</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;kernel/types.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;user/user.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// list.c: list file names in the current directory</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">dirent</span> &#123;</span></span><br><span class="line">  ushort inum;</span><br><span class="line">  <span class="type">char</span> name[<span class="number">14</span>];</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span></span><br><span class="line"><span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="type">int</span> fd;</span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">dirent</span> <span class="title">e</span>;</span></span><br><span class="line"></span><br><span class="line">  fd = open(<span class="string">&quot;.&quot;</span>, <span class="number">0</span>);</span><br><span class="line">  <span class="keyword">while</span>(read(fd, &amp;e, <span class="keyword">sizeof</span>(e)) == <span class="keyword">sizeof</span>(e))&#123;</span><br><span class="line">    <span class="keyword">if</span>(e.name[<span class="number">0</span>] != <span class="string">&#x27;\0&#x27;</span>)&#123;</span><br><span class="line">      <span class="built_in">printf</span>(<span class="string">&quot;%s\n&quot;</span>, e.name);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="Summary"><a href="#Summary" class="headerlink" title="* Summary"></a>* Summary</h3><ul>
+<li>We’ve looked at UNIX’s I&#x2F;O, file system, and process abstractions.</li>
+<li>The interfaces are simple – just integers and I&#x2F;O buffers.</li>
+<li>The abstractions combine well, e.g. for I&#x2F;O redirection.</li>
+</ul>
+<p>You’ll use these system calls in the first lab, due next week.</p>
+<h2 id="Assignment-Lab-util-Unix-utilities"><a href="#Assignment-Lab-util-Unix-utilities" class="headerlink" title="Assignment: Lab util: Unix utilities"></a>Assignment: Lab util: Unix utilities</h2><h3 id="sleep-easy"><a href="#sleep-easy" class="headerlink" title="sleep (easy)"></a>sleep (<a target="_blank" rel="noopener" href="https://pdos.csail.mit.edu/6.S081/2020/labs/guidance.html">easy</a>)</h3><p>Implement the UNIX program <code>sleep</code> for xv6; your <code>sleep</code> should pause for a user-specified number of ticks. A tick is a notion of time defined by the xv6 kernel, namely the time between two interrupts from the timer chip. Your solution should be in the file <code>user/sleep.c</code>.</p>
+<p>Some hints:</p>
+<ul>
+<li>Before you start coding, read Chapter 1 of the <a target="_blank" rel="noopener" href="https://pdos.csail.mit.edu/6.S081/2020/xv6/book-riscv-rev1.pdf">xv6 book</a>.</li>
+<li>Look at some of the other programs in <code>user/</code> (e.g., <code>user/echo.c</code>, <code>user/grep.c</code>, and <code>user/rm.c</code>) to see how you can obtain the command-line arguments passed to a program.</li>
+<li>If the user forgets to pass an argument, sleep should print an error message.</li>
+<li>The command-line argument is passed as a string; you can convert it to an integer using <code>atoi</code> (see user&#x2F;ulib.c).</li>
+<li>Use the system call <code>sleep</code>.</li>
+<li>See <code>kernel/sysproc.c</code> for the xv6 kernel code that implements the <code>sleep</code> system call (look for <code>sys_sleep</code>), <code>user/user.h</code> for the C definition of <code>sleep</code> callable from a user program, and <code>user/usys.S</code> for the assembler code that jumps from user code into the kernel for <code>sleep</code>.</li>
+<li>Make sure <code>main</code> calls <code>exit()</code> in order to exit your program.</li>
+<li>Add your <code>sleep</code> program to <code>UPROGS</code> in Makefile; once you’ve done that, <code>make qemu</code> will compile your program and you’ll be able to run it from the xv6 shell.</li>
+<li>Look at Kernighan and Ritchie’s book <em>The C programming language (second edition)</em> (K&amp;R) to learn about C.</li>
+</ul>
+<p>Run the program from the xv6 shell:</p>
+<figure class="highlight plaintext"><figcaption><span>shell</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ make qemu</span><br><span class="line">...</span><br><span class="line">init: starting sh</span><br><span class="line">$ sleep 10</span><br><span class="line">(nothing happens for a little while)</span><br><span class="line">$</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;kernel/types.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;user/user.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// sleep.c: pause for a user-specified number of ticks</span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span></span><br><span class="line"><span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> *argv[])</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span>(argc != <span class="number">2</span>)&#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="number">2</span>, <span class="string">&quot;Usage: sleep number-of-ticks&quot;</span>);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    sleep(atoi(argv[<span class="number">1</span>]));</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Note that make grade runs all tests, including the ones for the assignments below. If you want to run the grade tests for one assignment, type:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ./grade-lab-util sleep  </span><br></pre></td></tr></table></figure>
+
+<p>This will run the grade tests that match “sleep”. Or, you can type:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ make GRADEFLAGS=sleep grade   </span><br></pre></td></tr></table></figure>
+
+<p>which does the same.</p>
+<h3 id="pingpong-easy"><a href="#pingpong-easy" class="headerlink" title="pingpong (easy)"></a>pingpong (<a target="_blank" rel="noopener" href="https://pdos.csail.mit.edu/6.S081/2020/labs/guidance.html">easy</a>)</h3><p>Write a program that uses UNIX system calls to ‘’ping-pong’’ a byte between two processes over a pair of pipes, one for each direction. The parent should send a byte to the child; the child should print “<pid>: received ping”, where <pid> is its process ID, write the byte on the pipe to the parent, and exit; the parent should read the byte from the child, print “<pid>: received pong”, and exit. Your solution should be in the file <code>user/pingpong.c</code>.</p>
+<p>Some hints:</p>
+<ul>
+<li>Use <code>pipe</code> to create a pipe.</li>
+<li>Use <code>fork</code> to create a child.</li>
+<li>Use <code>read</code> to read from the pipe, and <code>write</code> to write to the pipe.</li>
+<li>Use <code>getpid</code> to find the process ID of the calling process.</li>
+<li>Add the program to <code>UPROGS</code> in Makefile.</li>
+<li>User programs on xv6 have a limited set of library functions available to them. You can see the list in <code>user/user.h</code>; the source (other than for system calls) is in <code>user/ulib.c</code>, <code>user/printf.c</code>, and <code>user/umalloc.c</code>.</li>
+</ul>
+<p>Run the program from the xv6 shell and it should produce the following output:</p>
+<figure class="highlight plaintext"><figcaption><span>shell</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ make qemu</span><br><span class="line">  ...</span><br><span class="line">  init: starting sh</span><br><span class="line">  $ pingpong</span><br><span class="line">  4: received ping</span><br><span class="line">  3: received pong</span><br><span class="line">  $</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;kernel/types.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;user/user.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// pingpong.c: &#x27;&#x27;ping-pong&#x27;&#x27; a byte between two processes over a pair of pipes, one for each direction</span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> </span><br><span class="line"><span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> *argv[])</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> ctop[<span class="number">2</span>];</span><br><span class="line">    <span class="type">int</span> ptoc[<span class="number">2</span>];</span><br><span class="line">    <span class="type">char</span> buf[<span class="number">50</span>];</span><br><span class="line">    <span class="type">int</span> pid;</span><br><span class="line">    pipe(ctop);</span><br><span class="line">    pipe(ptoc);</span><br><span class="line">    pid = fork();</span><br><span class="line">    <span class="keyword">if</span>(pid &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        close(ptoc[<span class="number">0</span>]);</span><br><span class="line">        close(ctop[<span class="number">1</span>]);</span><br><span class="line">        write(ptoc[<span class="number">1</span>], <span class="string">&quot;ping&quot;</span>, <span class="keyword">sizeof</span>(<span class="string">&quot;ping&quot;</span>));</span><br><span class="line">        wait(<span class="literal">NULL</span>);</span><br><span class="line">        read(ctop[<span class="number">0</span>], buf, <span class="keyword">sizeof</span>(buf));</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%d: received %s\n&quot;</span>, getpid(), buf);</span><br><span class="line">        close(ptoc[<span class="number">1</span>]);</span><br><span class="line">        close(ctop[<span class="number">0</span>]);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        close(ctop[<span class="number">0</span>]);</span><br><span class="line">        close(ptoc[<span class="number">1</span>]);</span><br><span class="line">        read(ptoc[<span class="number">0</span>], buf, <span class="keyword">sizeof</span>(buf));</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%d: received %s\n&quot;</span>, getpid(), buf);</span><br><span class="line">        write(ctop[<span class="number">1</span>], <span class="string">&quot;pong&quot;</span>, <span class="keyword">sizeof</span>(<span class="string">&quot;pong&quot;</span>));</span><br><span class="line">        close(ctop[<span class="number">1</span>]);</span><br><span class="line">        close(ptoc[<span class="number">0</span>]);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="primes-moderate-x2F-hard"><a href="#primes-moderate-x2F-hard" class="headerlink" title="primes (moderate)&#x2F;(hard)"></a>primes (<a target="_blank" rel="noopener" href="https://pdos.csail.mit.edu/6.S081/2020/labs/guidance.html">moderate</a>)&#x2F;(<a target="_blank" rel="noopener" href="https://pdos.csail.mit.edu/6.S081/2020/labs/guidance.html">hard</a>)</h3><p>Write a concurrent version of prime sieve using pipes. This idea is due to Doug McIlroy, inventor of Unix pipes. The picture halfway down <a target="_blank" rel="noopener" href="http://swtch.com/~rsc/thread/">this page</a> and the surrounding text explain how to do it. Your solution should be in the file <code>user/primes.c</code>.</p>
+<p>Your goal is to use <code>pipe</code> and <code>fork</code> to set up the pipeline. The first process feeds the numbers 2 through 35 into the pipeline. For each prime number, you will arrange to create one process that reads from its left neighbor over a pipe and writes to its right neighbor over another pipe. Since xv6 has limited number of file descriptors and processes, the first process can stop at 35.</p>
+<p>Some hints:</p>
+<ul>
+<li>Be careful to close file descriptors that a process doesn’t need, because otherwise your program will run xv6 out of resources before the first process reaches 35.</li>
+<li>Once the first process reaches 35, it should wait until the entire pipeline terminates, including all children, grandchildren, &amp;c. Thus the main primes process should only exit after all the output has been printed, and after all the other primes processes have exited.</li>
+<li>Hint: <code>read</code> returns zero when the write-side of a pipe is closed.</li>
+<li>It’s simplest to directly write 32-bit (4-byte) <code>int</code>s to the pipes, rather than using formatted ASCII I&#x2F;O.</li>
+<li>You should create the processes in the pipeline only as they are needed.</li>
+<li>Add the program to <code>UPROGS</code> in Makefile.</li>
+</ul>
+<p>Your solution is correct if it implements a pipe-based sieve and produces the following output:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">$ make qemu</span><br><span class="line">...</span><br><span class="line">init: starting sh</span><br><span class="line">$ primes</span><br><span class="line">prime 2</span><br><span class="line">prime 3</span><br><span class="line">prime 5</span><br><span class="line">prime 7</span><br><span class="line">prime 11</span><br><span class="line">prime 13</span><br><span class="line">prime 17</span><br><span class="line">prime 19</span><br><span class="line">prime 23</span><br><span class="line">prime 29</span><br><span class="line">prime 31</span><br><span class="line">$</span><br><span class="line">  </span><br></pre></td></tr></table></figure>
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;kernel/types.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;user/user.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span></span><br><span class="line"><span class="title function_">primes</span><span class="params">(<span class="type">int</span> lpipe[<span class="number">2</span>])</span></span><br><span class="line">&#123;</span><br><span class="line">    close(lpipe[<span class="number">1</span>]);</span><br><span class="line">    <span class="type">int</span> p, next_p[<span class="number">2</span>];</span><br><span class="line">    pipe(next_p);</span><br><span class="line">    <span class="keyword">if</span>(read(lpipe[<span class="number">0</span>], &amp;n, <span class="keyword">sizeof</span>(<span class="type">int</span>) == <span class="keyword">sizeof</span>(<span class="type">int</span>))) &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;primes %d&quot;</span>, p);</span><br><span class="line">        <span class="type">int</span> child_pid = fork();</span><br><span class="line">        <span class="keyword">if</span> (child_pid &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            primes(next_p);</span><br><span class="line">            <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            close(next_p[<span class="number">0</span>]);</span><br><span class="line">            <span class="type">int</span> n;</span><br><span class="line">            <span class="keyword">while</span> (read(lpipe[<span class="number">0</span>], &amp;n, <span class="keyword">sizeof</span>(<span class="type">int</span>) == <span class="keyword">sizeof</span>(<span class="type">int</span>))) &#123;</span><br><span class="line">                <span class="keyword">if</span> (n % p != <span class="number">0</span>) &#123;</span><br><span class="line">                    write(next_p[<span class="number">1</span>], n, <span class="keyword">sizeof</span>(<span class="type">int</span>));</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            close(next_p[<span class="number">1</span>]);</span><br><span class="line">            wait(<span class="number">0</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> </span><br><span class="line"><span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> *argv[])</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> fd[<span class="number">2</span>], p, n;</span><br><span class="line">    pipe(fd);</span><br><span class="line">  	<span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">2</span>; i &lt; <span class="number">36</span>; i++)</span><br><span class="line">        write(p[<span class="number">1</span>], &amp;i, <span class="keyword">sizeof</span>(<span class="type">int</span>));</span><br><span class="line">    <span class="keyword">if</span> (fork(); == <span class="number">0</span>) &#123;</span><br><span class="line">        primes(fd);</span><br><span class="line">        <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="find-moderate"><a href="#find-moderate" class="headerlink" title="find (moderate)"></a>find (<a target="_blank" rel="noopener" href="https://pdos.csail.mit.edu/6.S081/2020/labs/guidance.html">moderate</a>)</h3><p>Write a simple version of the UNIX find program: find all the files in a directory tree with a specific name. Your solution should be in the file <code>user/find.c</code>.</p>
+<p>Some hints:</p>
+<ul>
+<li>Look at user&#x2F;ls.c to see how to read directories.</li>
+<li>Use recursion to allow find to descend into sub-directories.</li>
+<li>Don’t recurse into “.” and “..”.</li>
+<li>Changes to the file system persist across runs of qemu; to get a clean file system run make clean and then make qemu.</li>
+<li>You’ll need to use C strings. Have a look at K&amp;R (the C book), for example Section 5.5.</li>
+<li>Note that &#x3D;&#x3D; does not compare strings like in Python. Use strcmp() instead.</li>
+<li>Add the program to <code>UPROGS</code> in Makefile.</li>
+</ul>
+<p>Your solution is correct if produces the following output (when the file system contains the files <code>b</code> and <code>a/b</code>):</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">$ make qemu</span><br><span class="line">...</span><br><span class="line">init: starting sh</span><br><span class="line">$ echo &gt; b</span><br><span class="line">$ mkdir a</span><br><span class="line">$ echo &gt; a/b</span><br><span class="line">$ find . b</span><br><span class="line">./b</span><br><span class="line">./a/b</span><br><span class="line">$ </span><br><span class="line">  </span><br></pre></td></tr></table></figure>
+
+<h3 id="xargs-moderate"><a href="#xargs-moderate" class="headerlink" title="xargs (moderate)"></a>xargs (<a target="_blank" rel="noopener" href="https://pdos.csail.mit.edu/6.S081/2020/labs/guidance.html">moderate</a>)</h3><p>Write a simple version of the UNIX xargs program: read lines from the standard input and run a command for each line, supplying the line as arguments to the command. Your solution should be in the file <code>user/xargs.c</code>.</p>
+<p>The following example illustrates xarg’s behavior:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ echo hello too | xargs echo bye</span><br><span class="line">bye hello too</span><br><span class="line">$</span><br><span class="line">  </span><br></pre></td></tr></table></figure>
+
+<p>Note that the command here is “echo bye” and the additional arguments are “hello too”, making the command “echo bye hello too”, which outputs “bye hello too”.</p>
+<p>Please note that xargs on UNIX makes an optimization where it will feed more than argument to the command at a time. We don’t expect you to make this optimization. To make xargs on UNIX behave the way we want it to for this lab, please run it with the -n option set to 1. For instance</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ echo &quot;1\n2&quot; | xargs -n 1 echo line</span><br><span class="line">line 1</span><br><span class="line">line 2</span><br><span class="line">$</span><br><span class="line">  </span><br></pre></td></tr></table></figure>
+
+<p>Some hints:</p>
+<ul>
+<li>Use <code>fork</code> and <code>exec</code> to invoke the command on each line of input. Use <code>wait</code> in the parent to wait for the child to complete the command.</li>
+<li>To read individual lines of input, read a character at a time until a newline (‘\n’) appears.</li>
+<li>kernel&#x2F;param.h declares MAXARG, which may be useful if you need to declare an argv array.</li>
+<li>Add the program to <code>UPROGS</code> in Makefile.</li>
+<li>Changes to the file system persist across runs of qemu; to get a clean file system run make clean and then make qemu.</li>
+</ul>
+<p>xargs, find, and grep combine well:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ find . b | xargs grep hello</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>will run “grep hello” on each file named b in the directories below “.”.</p>
+<p>To test your solution for xargs, run the shell script xargstest.sh. Your solution is correct if it produces the following output:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$ make qemu</span><br><span class="line">...</span><br><span class="line">init: starting sh</span><br><span class="line">$ sh &lt; xargstest.sh</span><br><span class="line">$ $ $ $ $ $ hello</span><br><span class="line">hello</span><br><span class="line">hello</span><br><span class="line">$ $   </span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>You may have to go back and fix bugs in your find program. The output has many <code>$</code> because the xv6 shell doesn’t realize it is processing commands from a file instead of from the console, and prints a <code>$</code> for each command in the file.</p>
+<h2 id="C-and-gdb"><a href="#C-and-gdb" class="headerlink" title="C and gdb"></a>C and gdb</h2><h2 id="Assignment-Lab-syscall-System-calls"><a href="#Assignment-Lab-syscall-System-calls" class="headerlink" title="Assignment: Lab syscall: System calls"></a>Assignment: Lab syscall: System calls</h2></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="https://heliannl.github.io">Cecily</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="https://heliannl.github.io/2022/06/25/LEC1-Introduction-and-examples/">https://heliannl.github.io/2022/06/25/LEC1-Introduction-and-examples/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/MIT-6-S081/">MIT 6.S081</a></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/gh/overtrue/share.js@master/dist/js/social-share.min.js" defer></script></div></div><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><div><a href="/2022/06/25/LEC3-OS-organization-and-system-calls/" title="LEC3 OS organization and system calls"><img class="cover" src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-06-25</div><div class="title">LEC3 OS organization and system calls</div></div></a></div><div><a href="/2022/06/25/LEC5-Calling-conventions-and-stacks-frames-RISC-V/" title="LEC5 Calling conventions and stacks frames RISC-V"><img class="cover" src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-06-25</div><div class="title">LEC5 Calling conventions and stacks frames RISC-V</div></div></a></div><div><a href="/2022/06/25/LEC4-Page-tables/" title="LEC4 Page tables"><img class="cover" src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-06-25</div><div class="title">LEC4 Page tables</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Catalog</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#6-S081-2020-Lecture-1-Introduction-and-examples"><span class="toc-number">1.</span> <span class="toc-text">6.S081 2020 Lecture 1: Introduction and examples</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Overview"><span class="toc-number">1.1.</span> <span class="toc-text">Overview</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#6-S081-goals"><span class="toc-number">1.1.1.</span> <span class="toc-text">* 6.S081 goals</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#What-is-the-purpose-of-an-O-x2F-S"><span class="toc-number">1.1.2.</span> <span class="toc-text">* What is the purpose of an O&#x2F;S?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Organization-layered-picture"><span class="toc-number">1.1.3.</span> <span class="toc-text">* Organization: layered picture</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#What-services-does-an-O-x2F-S-kernel-typically-provide"><span class="toc-number">1.1.4.</span> <span class="toc-text">* What services does an O&#x2F;S kernel typically provide?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#What%E2%80%99s-the-application-x2F-kernel-interface"><span class="toc-number">1.1.5.</span> <span class="toc-text">* What’s the application &#x2F; kernel interface?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Why-is-O-x2F-S-design-implementation-hard-and-interesting"><span class="toc-number">1.1.6.</span> <span class="toc-text">* Why is O&#x2F;S design+implementation hard and interesting?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#You%E2%80%99ll-be-glad-you-took-this-course-if-you%E2%80%A6"><span class="toc-number">1.1.7.</span> <span class="toc-text">* You’ll be glad you took this course if you…</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Class-structure"><span class="toc-number">1.2.</span> <span class="toc-text">Class structure</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Online-course-information"><span class="toc-number">1.2.1.</span> <span class="toc-text">* Online course information:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Lectures"><span class="toc-number">1.2.2.</span> <span class="toc-text">* Lectures</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Labs"><span class="toc-number">1.2.3.</span> <span class="toc-text">* Labs:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Grading"><span class="toc-number">1.2.4.</span> <span class="toc-text">* Grading:</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Introduction-to-UNIX-system-calls"><span class="toc-number">1.3.</span> <span class="toc-text">Introduction to UNIX system calls</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Applications-see-the-O-x2F-S-via-system-calls-that-interface-will-be-a-big-focus"><span class="toc-number">1.3.1.</span> <span class="toc-text">* Applications see the O&#x2F;S via system calls; that interface will be a big focus.</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#I%E2%80%99ll-show-some-examples-and-run-them-on-xv6"><span class="toc-number">1.3.2.</span> <span class="toc-text">* I’ll show some examples, and run them on xv6.</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#example-copy-c-copy-input-to-output"><span class="toc-number">1.3.3.</span> <span class="toc-text">* example: copy.c, copy input to output</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#example-open-c-create-a-file"><span class="toc-number">1.3.4.</span> <span class="toc-text">* example: open.c, create a file</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#what-happens-when-a-program-calls-a-system-call-like-open"><span class="toc-number">1.3.5.</span> <span class="toc-text">* what happens when a program calls a system call like open()?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#I%E2%80%99ve-been-typing-to-UNIX%E2%80%99s-command-line-interface-the-shell"><span class="toc-number">1.3.6.</span> <span class="toc-text">* I’ve been typing to UNIX’s command-line interface, the shell.</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#example-fork-c-create-a-new-process"><span class="toc-number">1.3.7.</span> <span class="toc-text">* example: fork.c, create a new process</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#example-exec-c-replace-calling-process-with-an-executable-file"><span class="toc-number">1.3.8.</span> <span class="toc-text">* example: exec.c, replace calling process with an executable file</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#example-forkexec-c-fork-a-new-process-exec-a-program"><span class="toc-number">1.3.9.</span> <span class="toc-text">* example: forkexec.c, fork() a new process, exec() a program</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#example-redirect-c-redirect-the-output-of-a-command"><span class="toc-number">1.3.10.</span> <span class="toc-text">* example: redirect.c, redirect the output of a command</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#It%E2%80%99s-worth-asking-%E2%80%9Cwhy%E2%80%9D-about-design-decisions"><span class="toc-number">1.3.11.</span> <span class="toc-text">* It’s worth asking “why” about design decisions:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#example-pipe1-c-communicate-through-a-pipe"><span class="toc-number">1.3.12.</span> <span class="toc-text">* example: pipe1.c, communicate through a pipe</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#example-pipe2-c-communicate-between-processes"><span class="toc-number">1.3.13.</span> <span class="toc-text">* example: pipe2.c, communicate between processes</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#example-list-c-list-files-in-a-directory"><span class="toc-number">1.3.14.</span> <span class="toc-text">* example: list.c, list files in a directory</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Summary"><span class="toc-number">1.3.15.</span> <span class="toc-text">* Summary</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Assignment-Lab-util-Unix-utilities"><span class="toc-number">1.4.</span> <span class="toc-text">Assignment: Lab util: Unix utilities</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#sleep-easy"><span class="toc-number">1.4.1.</span> <span class="toc-text">sleep (easy)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#pingpong-easy"><span class="toc-number">1.4.2.</span> <span class="toc-text">pingpong (easy)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#primes-moderate-x2F-hard"><span class="toc-number">1.4.3.</span> <span class="toc-text">primes (moderate)&#x2F;(hard)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#find-moderate"><span class="toc-number">1.4.4.</span> <span class="toc-text">find (moderate)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#xargs-moderate"><span class="toc-number">1.4.5.</span> <span class="toc-text">xargs (moderate)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#C-and-gdb"><span class="toc-number">1.5.</span> <span class="toc-text">C and gdb</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Assignment-Lab-syscall-System-calls"><span class="toc-number">1.6.</span> <span class="toc-text">Assignment: Lab syscall: System calls</span></a></li></ol></li></ol></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2022 By Cecily</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">Hi, welcome to my blog !</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Switch Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js"></script><div class="js-pjax"><script>(() => {
+  const $mermaidWrap = document.querySelectorAll('#article-container .mermaid-wrap')
+  if ($mermaidWrap.length) {
+    window.runMermaid = () => {
+      window.loadMermaid = true
+      const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+      Array.from($mermaidWrap).forEach((item, index) => {
+        const mermaidSrc = item.firstElementChild
+        const mermaidThemeConfig = '%%{init:{ \'theme\':\'' + theme + '\'}}%%\n'
+        const mermaidID = 'mermaid-' + index
+        const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+        mermaid.mermaidAPI.render(mermaidID, mermaidDefinition, (svgCode) => {
+          mermaidSrc.insertAdjacentHTML('afterend', svgCode)
+        })
+      })
+    }
+
+    const loadMermaid = () => {
+      window.loadMermaid ? runMermaid() : getScript('https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js').then(runMermaid)
+    }
+
+    window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+  }
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

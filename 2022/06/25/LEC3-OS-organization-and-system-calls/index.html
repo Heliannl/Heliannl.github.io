@@ -1,0 +1,495 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>LEC3 OS organization and system calls | Cecily</title><meta name="keywords" content="MIT 6.S081"><meta name="author" content="Cecily"><meta name="copyright" content="Cecily"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="6.S081 2020 Lecture 3: OS organization and system callsOverview*  Lecture Topic: OS design system calls micro&#x2F;monolithic kernel   First system call in xv6  * OS picture apps: sh, echo, … system c">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LEC3 OS organization and system calls">
+<meta property="og:url" content="https://heliannl.github.io/2022/06/25/LEC3-OS-organization-and-system-calls/index.html">
+<meta property="og:site_name" content="Cecily">
+<meta property="og:description" content="6.S081 2020 Lecture 3: OS organization and system callsOverview*  Lecture Topic: OS design system calls micro&#x2F;monolithic kernel   First system call in xv6  * OS picture apps: sh, echo, … system c">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg">
+<meta property="article:published_time" content="2022-06-25T12:37:42.000Z">
+<meta property="article:modified_time" content="2022-06-25T12:38:07.049Z">
+<meta property="article:author" content="Cecily">
+<meta property="article:tag" content="MIT 6.S081">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://heliannl.github.io/2022/06/25/LEC3-OS-organization-and-system-calls/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: 'days',
+  date_suffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'LEC3 OS organization and system calls',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-06-25 20:38:07'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.2.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">5</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">1</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">0</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Cecily</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">LEC3 OS organization and system calls</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2022-06-25T12:37:42.000Z" title="Created 2022-06-25 20:37:42">2022-06-25</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2022-06-25T12:38:07.049Z" title="Updated 2022-06-25 20:38:07">2022-06-25</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">Word count:</span><span class="word-count">1.6k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">Reading time:</span><span>8min</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="LEC3 OS organization and system calls"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="6-S081-2020-Lecture-3-OS-organization-and-system-calls"><a href="#6-S081-2020-Lecture-3-OS-organization-and-system-calls" class="headerlink" title="6.S081 2020 Lecture 3: OS organization and system calls"></a>6.S081 2020 Lecture 3: OS organization and system calls</h1><h2 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h2><h3 id="Lecture-Topic"><a href="#Lecture-Topic" class="headerlink" title="*  Lecture Topic:"></a>*  Lecture Topic:</h3><ul>
+<li>OS design<ul>
+<li>system calls</li>
+<li>micro&#x2F;monolithic kernel</li>
+</ul>
+</li>
+<li>First system call in xv6</li>
+</ul>
+<h3 id="OS-picture"><a href="#OS-picture" class="headerlink" title="* OS picture"></a>* OS picture</h3><ul>
+<li>apps: sh, echo, …</li>
+<li>system call interface (open, close,…)</li>
+<li>OS</li>
+</ul>
+<h3 id="Goal-of-OS"><a href="#Goal-of-OS" class="headerlink" title="* Goal of OS"></a>* Goal of OS</h3><ul>
+<li>run multiple applications</li>
+<li>isolate them</li>
+<li>multiplex them</li>
+<li>share</li>
+</ul>
+<h3 id="Strawman-design-No-OS"><a href="#Strawman-design-No-OS" class="headerlink" title="* Strawman design: No OS"></a>* Strawman design: No OS</h3><ul>
+<li>Application directly interacts with hardware<ul>
+<li>CPU cores &amp; registers</li>
+<li>DRAM chips</li>
+<li>Disk blocks<br>…</li>
+</ul>
+</li>
+<li>OS library perhaps abstracts some of it</li>
+</ul>
+<h3 id="Strawman-design-not-conducive-to-multiplexing"><a href="#Strawman-design-not-conducive-to-multiplexing" class="headerlink" title="* Strawman design not conducive to multiplexing"></a>* Strawman design not conducive to multiplexing</h3><ul>
+<li>each app periodically must give up hardware</li>
+<li>BUT, weak isolation<ul>
+<li>app forgets to give up, no other app runs</li>
+<li>apps has end-less loop, no other app runs</li>
+<li>you cannot even kill the badly app from another app</li>
+</ul>
+</li>
+<li>but used by real-time OSs<ul>
+<li>“cooperative scheduling”</li>
+</ul>
+</li>
+</ul>
+<h3 id="Strawman-design-not-conducive-to-memory-isolation"><a href="#Strawman-design-not-conducive-to-memory-isolation" class="headerlink" title="* Strawman design not conducive to memory isolation"></a>* Strawman design not conducive to memory isolation</h3><ul>
+<li>all apps share physical memory</li>
+<li>one app can overwrites another app’s memory</li>
+<li>one app can overwrite OS library</li>
+</ul>
+<h3 id="Unix-interface-conducive-to-OS-goals"><a href="#Unix-interface-conducive-to-OS-goals" class="headerlink" title="* Unix interface conducive to OS goals"></a>* Unix interface conducive to OS goals</h3><ul>
+<li><p>abstracts the hardware in way that achieves goals (enforce multiplexing &amp; memory isolation)</p>
+</li>
+<li><p>processes (instead of cores): fork</p>
+<ul>
+<li>OS transparently allocates cores to processes<br>Saves and restore registers</li>
+<li>Enforces that processes give them up<br>Periodically re-allocates cores     </li>
+<li>因为应用程序不能直接访问CPU，而是通过进程抽象（1个CPU一个process），使得幕后的内核可以在进程之间切换。不是直接操纵CPU或将CPU分配给应用程序，操作系统提供进程作为对CPU的抽象，所以操作系统可以复用一个或多个CPU到多个应用程序</li>
+</ul>
+</li>
+<li><p>memory (instead of physical memory): exec</p>
+<ul>
+<li>Each process has its “own” memory</li>
+<li>OS can decide where to place app in memory</li>
+<li>OS can enforce isolation between memory of different apps</li>
+<li>OS allows storing image in file system</li>
+</ul>
+</li>
+<li><p>files (instead of disk blocks)</p>
+<ul>
+<li>OS can provide convenient names</li>
+<li>OS can allow sharing of files between processes&#x2F;users</li>
+</ul>
+</li>
+<li><p>pipes (instead of shared physical mem)</p>
+<ul>
+<li>OS can stop sender&#x2F;receiver</li>
+</ul>
+</li>
+<li><p>OS must be defensive</p>
+<ul>
+<li><p>an application shouldn’t be able to crash OS</p>
+</li>
+<li><p>an application shouldn’t be able to break out of its isolation</p>
+<p>&#x3D;&gt; need strong isolation between apps and OS<br>&#x3D;&gt; approach: hardware support</p>
+<ul>
+<li>user&#x2F;kernel mode</li>
+<li>virtual memory</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Processors provide user&#x2F;kernel mode</p>
+<ul>
+<li>kernel mode: CPU can execute “privileged” instructions (引入直接操作硬件的指令, setup the pagetable register, or disabling clock, or interrupts,…)<ul>
+<li>e.g., setting kernel&#x2F;user bit</li>
+<li>e.g., reprogramming timer chip (在定时器结束后，会触发从user切换到kernel)</li>
+</ul>
+</li>
+<li>user mode: CPU cannot execute privileged instructions (add. sub, jr, branch,…)</li>
+<li>Run OS in kernel mode, applications in user mode</li>
+<li>[RISC-V has also an M mode, which we mostly ignore]</li>
+</ul>
+</li>
+<li><p>Processors provide virtual memory</p>
+<ul>
+<li>Hardware provides page tables that translate virtual address to physical (each process has its own page table, by doing so, 进程只能访问它的页表中显示的物理内存。如果OS设置每个进程使用不相交的物理内存，那么进程甚至不能访问其他进程的物理内存)</li>
+<li>Define what physical memory an application can access</li>
+<li>OS sets up page tables so that each application can access only its memory</li>
+</ul>
+</li>
+<li><p>Apps must be able to communicate with kernel</p>
+<ul>
+<li>Write to storage device, which is shared &#x3D;&gt; must be protected &#x3D;&gt; in kernel</li>
+<li>Exit app</li>
+<li>…</li>
+</ul>
+</li>
+<li><p>Solution: add instruction to change mode in controlled way</p>
+<ul>
+<li>ecall <n> (这个数字就是应用程序想要访问的系统调用编号 systemcall number)</li>
+<li>enters kernel mode at a pre-agreed entry point (进入内核中的一个由内核控制的特定位置。有一个单独的系统调用入口位置 systemcall entry point，每当应用程序调用ecall，应用程序进入内核的特定位置)</li>
+<li>user mode中调用fork()函数 -&gt; 实际上没有直接调用操作系统内核中对应的函数，而是调用ecall，使用fork的系统调用编号sys_fork -&gt; 进入kernel mode -&gt; kernel mode中一个函数syscall，在syscall.c中，每次系统调用都会到这个特定的系统调用函数，系统调用查找数字，然后决定传递给寄存器a0 (sys_fork)的数字，系统调用查找那个寄存器a0，查看是哪个数字，然后调用fork系统调用，kernel mode中可以进行检查，判断process是否被运行进行此system call</li>
+</ul>
+</li>
+<li><p>Modify OS picture</p>
+</li>
+<li><p>user &#x2F; kernel (redline)</p>
+</li>
+<li><p>app -&gt; printf() -&gt; write() -&gt; SYSTEM CALL -&gt; sys_write() -&gt; …</p>
+<ul>
+<li>user-level libraries are app’s private business</li>
+</ul>
+</li>
+<li><p>kernel internal functions are not callable by user</p>
+</li>
+<li><p>other way of drawing picture:<br>syscall 1  -&gt; system call stub -&gt; kernel entry -&gt; syscall -&gt; fs<br>syscall 2                                                 -&gt; proc</p>
+</li>
+<li><p>system call stub executes special instruction to enter kernel</p>
+<ul>
+<li>hardware switches to kernel mode</li>
+<li>but only at an entry point specified by the kernel</li>
+</ul>
+</li>
+<li><p>syscall need some way to get at arguments of syscall</p>
+</li>
+<li><p>[syscalls the topic of this week’s lab]</p>
+</li>
+<li><p>Kernel is the Trusted Computing Base (TCB)</p>
+<ul>
+<li>Kernel must be “correct” (no bug)<ul>
+<li>Bugs in kernel could allow user apps to circumvent kernel&#x2F;user</li>
+<li>Happens often in practice, because kernels are complex</li>
+<li>See CVEs</li>
+</ul>
+</li>
+<li>Kernel must treat user apps as suspect (恶意的，内核设计者必须有安全思维意识)<ul>
+<li>User app may trick kernel to do the wrong thing</li>
+<li>Kernel must check arguments carefully</li>
+<li>Setup user&#x2F;kernel correctly</li>
+<li>Etc.</li>
+</ul>
+</li>
+<li>Kernel in charge of separating applications too<ul>
+<li>One app may try to read&#x2F;write another app’s memory</li>
+<li>&#x3D;&gt; Requires a security mindset</li>
+<li>Any bug in kernel may be a security exploit</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Aside: can one have process isolation WITHOUT h&#x2F;w-supported</p>
+<ul>
+<li><p>kernel&#x2F;user mode and virtual memory?</p>
+</li>
+<li><p>yes! use a strongly-typed programming language</p>
+</li>
+<li><p>For example, see Singularity O&#x2F;S</p>
+<ul>
+<li>the compiler is then the trust computing base (TCB)</li>
+<li>but h&#x2F;w user&#x2F;kernel mode is the most popular plan</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Monolothic kernel (宏内核设计)</p>
+<ul>
+<li>OS runs in kernel space</li>
+<li>Xv6 does this.  Linux etc. too.</li>
+<li>kernel interface &#x3D;&#x3D; system call interface</li>
+<li>one big program with file system, drivers, &amp;c<ul>
+<li>good: easy for subsystems to cooperate -&gt; performance<br>one cache shared by file system and virtual memory</li>
+<li>bad: interactions are complex<br>leads to bugs<br>no isolation within</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Microkernel design (微内核设计，减少内核中的代码，目标是使操作系统bug处于内核之外)</p>
+<ul>
+<li>many OS services run as ordinary user programs<ul>
+<li>file system in a file server</li>
+</ul>
+</li>
+<li>kernel implements minimal mechanism to run services in user space<ul>
+<li>processes with memory</li>
+<li>inter-process communication (IPC)</li>
+</ul>
+</li>
+<li>kernel interface !&#x3D; system call interface		<ul>
+<li>good: more isolation</li>
+<li>bad: may be hard to get good performance</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>both monolithic and microkernel designs widely used</p>
+</li>
+<li><p>Xv6 case study</p>
+<ul>
+<li>Monolithic kernel<ul>
+<li>Unix system calls &#x3D;&#x3D; kernel interface</li>
+</ul>
+</li>
+<li>Source code reflects OS organization (by convention)<ul>
+<li>user&#x2F;   apps in user mode</li>
+<li>kernel&#x2F;  code in kernel mode</li>
+</ul>
+</li>
+<li>Kernel has several parts<ul>
+<li>kernel&#x2F;defs.h<ul>
+<li>proc</li>
+<li>fs</li>
+<li>..</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Goal: read source code and understand it (without consulting book)</li>
+</ul>
+</li>
+<li><p>Using xv6</p>
+<ul>
+<li>Makefile builds<ul>
+<li>kernel program</li>
+<li>user programs</li>
+<li>mkfs</li>
+</ul>
+</li>
+<li>$ make qemu<ul>
+<li>runs xv6 on qemu</li>
+<li>emulates a RISC-V computer</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Building kernel</p>
+<ul>
+<li>.c -&gt; gcc -&gt; .s -&gt; .o  \</li>
+<li>….                                ld -&gt; a.out (kernel)</li>
+<li>.c -&gt; gcc -&gt; .s -&gt; .o  &#x2F;</li>
+<li>makefile keeps .asm file around for binary</li>
+<li>see for example, kernel&#x2F;kernel.asm</li>
+</ul>
+</li>
+<li><p>The RISC-V computer</p>
+<ul>
+<li>A very simple board (e.g., no display)<ul>
+<li>RISC-V processor with 4 cores</li>
+<li>RAM (128 MB)</li>
+<li>support for interrupts (PLIC, CLINT)</li>
+<li>support for UART<br>allows xv6 to talk to console<br>allows xv6 to read from keyboard</li>
+<li>support for e1000 network card (through PCIe)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Development using Qemu</p>
+<ul>
+<li>More convenient than using the real hardware</li>
+<li>Qemu emulates several RISC-V computers<ul>
+<li>we use the “virt” one<br><a target="_blank" rel="noopener" href="https://github.com/riscv/riscv-qemu/wiki">https://github.com/riscv/riscv-qemu/wiki</a></li>
+<li>close to the SiFive board (<a target="_blank" rel="noopener" href="https://www.sifive.com/boards">https://www.sifive.com/boards</a>)<br>but with virtio for disk</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>What is “to emulate”?</p>
+<ul>
+<li><p>Qemu is a C program that faithfully implements a RISC-V processor</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">for (;;) &#123;</span><br><span class="line">    read next instructions</span><br><span class="line">    decode instruction</span><br><span class="line">    execute instruction (updating processor state)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>[big idea: software &#x3D; hardware]</p>
+</li>
+</ul>
+</li>
+<li><p>Boot xv6 (under gdb)</p>
+<ul>
+<li>$ make CPUS&#x3D;1 qemu-gdb<br>runs xv6 under gdb (with 1 core)</li>
+<li>Qemu starts xv6 in kernel&#x2F;entry.S (see kernel&#x2F;kernel.ld)<ul>
+<li>set breakpoint at _entry<ul>
+<li>look at instruction</li>
+<li>info reg</li>
+</ul>
+</li>
+<li>set breakpoint at main<ul>
+<li>Walk through main</li>
+</ul>
+</li>
+<li>single step into userinit<ul>
+<li>Walk through userinit</li>
+<li>show proc.h</li>
+<li>show allocproc()</li>
+<li>show initcode.S&#x2F;initcode.asm</li>
+</ul>
+</li>
+<li>break forkret()<ul>
+<li>walk to userret</li>
+</ul>
+</li>
+<li>break syscall<ul>
+<li>print num</li>
+<li>syscalls[num]</li>
+<li>exec “&#x2F;init”</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="https://heliannl.github.io">Cecily</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="https://heliannl.github.io/2022/06/25/LEC3-OS-organization-and-system-calls/">https://heliannl.github.io/2022/06/25/LEC3-OS-organization-and-system-calls/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/MIT-6-S081/">MIT 6.S081</a></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/gh/overtrue/share.js@master/dist/js/social-share.min.js" defer></script></div></div><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><div><a href="/2022/06/25/LEC1-Introduction-and-examples/" title="LEC1 Introduction and examples"><img class="cover" src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-06-25</div><div class="title">LEC1 Introduction and examples</div></div></a></div><div><a href="/2022/06/25/LEC5-Calling-conventions-and-stacks-frames-RISC-V/" title="LEC5 Calling conventions and stacks frames RISC-V"><img class="cover" src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-06-25</div><div class="title">LEC5 Calling conventions and stacks frames RISC-V</div></div></a></div><div><a href="/2022/06/25/LEC4-Page-tables/" title="LEC4 Page tables"><img class="cover" src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-06-25</div><div class="title">LEC4 Page tables</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Catalog</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#6-S081-2020-Lecture-3-OS-organization-and-system-calls"><span class="toc-number">1.</span> <span class="toc-text">6.S081 2020 Lecture 3: OS organization and system calls</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Overview"><span class="toc-number">1.1.</span> <span class="toc-text">Overview</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Lecture-Topic"><span class="toc-number">1.1.1.</span> <span class="toc-text">*  Lecture Topic:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#OS-picture"><span class="toc-number">1.1.2.</span> <span class="toc-text">* OS picture</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Goal-of-OS"><span class="toc-number">1.1.3.</span> <span class="toc-text">* Goal of OS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Strawman-design-No-OS"><span class="toc-number">1.1.4.</span> <span class="toc-text">* Strawman design: No OS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Strawman-design-not-conducive-to-multiplexing"><span class="toc-number">1.1.5.</span> <span class="toc-text">* Strawman design not conducive to multiplexing</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Strawman-design-not-conducive-to-memory-isolation"><span class="toc-number">1.1.6.</span> <span class="toc-text">* Strawman design not conducive to memory isolation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Unix-interface-conducive-to-OS-goals"><span class="toc-number">1.1.7.</span> <span class="toc-text">* Unix interface conducive to OS goals</span></a></li></ol></li></ol></li></ol></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2022 By Cecily</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">Hi, welcome to my blog !</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Switch Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js"></script><div class="js-pjax"><script>(() => {
+  const $mermaidWrap = document.querySelectorAll('#article-container .mermaid-wrap')
+  if ($mermaidWrap.length) {
+    window.runMermaid = () => {
+      window.loadMermaid = true
+      const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+      Array.from($mermaidWrap).forEach((item, index) => {
+        const mermaidSrc = item.firstElementChild
+        const mermaidThemeConfig = '%%{init:{ \'theme\':\'' + theme + '\'}}%%\n'
+        const mermaidID = 'mermaid-' + index
+        const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+        mermaid.mermaidAPI.render(mermaidID, mermaidDefinition, (svgCode) => {
+          mermaidSrc.insertAdjacentHTML('afterend', svgCode)
+        })
+      })
+    }
+
+    const loadMermaid = () => {
+      window.loadMermaid ? runMermaid() : getScript('https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js').then(runMermaid)
+    }
+
+    window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+  }
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
